@@ -1,10 +1,12 @@
 const { assert, expect } = require("chai")
 const { network, deployments, ethers, getNamedAccounts } = require("hardhat")
-const { developmentChains } = require("../../helper-hardhat-config")
+const {
+  developmentChains,
+  networkConfig,
+} = require("../../helper-hardhat-config")
 
 describe("FundMe", async () => {
   let fundMe
-  let mockV3Aggregator
   let deployer
   beforeEach(async () => {
     if (!developmentChains.includes(network.name)) {
@@ -13,13 +15,13 @@ describe("FundMe", async () => {
     deployer = (await getNamedAccounts()).deployer
     await deployments.fixture(["all"])
     fundMe = await ethers.getContract("FundMe", deployer)
-    mockV3Aggregator = await ethers.getContract("MockV3Aggregator", deployer)
   })
 
   describe("constructor", () => {
     it("sets the aggregator addresses correctly", async () => {
+      const chainId = network.config.chainId
       const response = await fundMe.s_priceFeed()
-      assert.equal(response, mockV3Aggregator.address)
+      assert.equal(response, networkConfig[chainId]["ethUsdPriceFeed"])
     })
   })
 

@@ -68,6 +68,8 @@ npx hardhat deploy
 
 ## Testing
 
+In this version, we run testing off a forked mainnet, so you'll need to set your `MAINNET_RPC_URL` similar to how we set all our other environment variables. 
+
 ```
 npx hardhat test
 ```
